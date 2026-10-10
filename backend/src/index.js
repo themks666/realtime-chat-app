@@ -2,21 +2,23 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-import AuthRouter from "./routes/auth.route.js"
-import MessageRouter from "./routes/message.route.js"
-dotenv.config()
+import AuthRouter from "./routes/auth.route.js";
+import MessageRouter from "./routes/message.route.js";
+import { connectDB } from "./lib/connect.js";
+dotenv.config();
 
-const app = express()
+const app = express();
+const PORT = process.env.PORT || 5000;
 
+app.use(cors());
+app.use(express.json());
+app.use(cookieParser());
+app.use(cors());
 
-app.use(cors())
-app.use(express.json())
-app.use(cookieParser())
-app.use(cors())
+app.use("/api/auth", AuthRouter);
+app.use("/api/messages", MessageRouter);
 
-app.use("/api/auth", AuthRouter)
-app.use("/api/messages", MessageRouter)
-
-
-app.listen(3000, ()=>{console.log("Server runnning on port 3000");
-})
+app.listen(PORT, async () => {
+    await connectDB()
+  console.log("Server runnning on port 3000");
+});
