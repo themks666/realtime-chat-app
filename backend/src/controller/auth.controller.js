@@ -33,8 +33,8 @@ export const register = async (req, res) => {
       password: hashedPassword,
     });
     if (createdUser) {
-      generateToken(createdUser._id, res)
-      await createdUser.save();
+      const savedUser = await createdUser.save();
+      generateToken(savedUser._id, res)
       return res
         .status(201)
         .json({ success: true, message: "User Has been Created" });
