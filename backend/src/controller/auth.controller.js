@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { UserModel } from "../models/user.model.js";
 import { generateToken } from "../lib/token.js";
 import { sendEmail } from "../emails/emailHandlers.js";
+import { cloudinary } from "../lib/cloudinary.js";
 
 export const register = async (req, res) => {
   console.log("register");
@@ -95,3 +96,36 @@ export const logOut = async (req, res) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
+
+export const updateProfle = async (req, res)=>{
+  try {
+    const { fullName, profilepic } =req.body
+    const id  = req.params.id
+    if(!fullName && !profilepic){
+      return res
+      .status(403)
+      .json({ success: false, message: "All fields are required!" });
+    }
+    let updatedData = {}
+    if(fullName){
+      updatedData.fullName = fullName
+    }
+    if(profilepic){
+      const imageUpload = await cloudinary.uploader.upload(profilepic)
+      updatedData.profilePic = imageUpload.secure_url
+    }
+
+    const updatedProfile = await UserModel.findByIdAndUpdate(id, updatedData, {new:true}).select("-password")
+    return res.status(200).json({
+      success: true,
+      message: "Sucessfully Updated the profile",
+      user: updatedProfile
+    });
+
+  } catch (error) {
+    console.log(error.message);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+}
