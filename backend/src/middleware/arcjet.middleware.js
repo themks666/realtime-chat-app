@@ -3,7 +3,7 @@ import { isSpoofedBot } from "@arcjet/inspect";
 
 export const arcjetProtection = async (req, res, next) => {
   try {
-    const decision = await aj.protect8i8(req);
+    const decision = await aj.protect(req);
     if (decision.isDenied()) {
       if (decision.reason.isRateLimit()) {
         return res
