@@ -54,6 +54,11 @@ export const sendMessage = async (req, res) => {
       .status(403)
       .json({ success: false, message: "No text/image was provided" });
   }
+  if(senderId.equals(receiverId)){
+    return res
+      .status(403)
+      .json({ success: false, message: "Cant message yourself" });
+  }
   let imageUrl;
   if (image) {
     const uploadImage = cloudinary.uploader.upload(image);
