@@ -4,36 +4,45 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import { useAuthStore } from "./store/useAuthStore";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { Loader } from "lucide-react";
 import LoaderPage from "./components/LoaderPage";
+import Sidebar from "./components/SideBar";
+import HomePage from "./pages/LandingPage";
 
 function App() {
-  const { verifyUser, authUser,isVerifying } = useAuthStore();
+  const { verifyUser, authUser, isVerifying } = useAuthStore();
+
   useEffect(() => {
     verifyUser();
-  }, []);
-  if(isVerifying) return <LoaderPage></LoaderPage>
+  }, [verifyUser]);
+
+  if (isVerifying) return <LoaderPage />;
+
   return (
-    <>
-      <Routes>
-        <Route
-          path="/"
-          element={authUser ? <>Home Page</> : <Navigate to="/sign-in" />}
-        ></Route>
-        <Route
-          path="/sign-in"
-          element={!authUser ? <LoginPage /> : <Navigate to="/" />}
-        ></Route>
-        <Route
-          path="/chat"
-          element={authUser ? <ChatPage /> : <Navigate to="/sign-in" />}
-        ></Route>
-        <Route
-          path="/sign-up"
-          element={!authUser ? <SignUpPage /> : <Navigate to="/" />}
-        ></Route>
-      </Routes>
-    </>
+    <div className="flex h-screen w-screen overflow-hidden">
+      {authUser && <Sidebar />}
+
+      <div className="flex-1 h-full overflow-y-auto">
+        <Routes>
+          {/*
+          <Route
+            path="/"
+            element={authUser ? <><HomePage></HomePage></> : <Navigate to="/sign-in" />}
+          /> */}
+          <Route
+            path="/sign-in"
+            element={!authUser ? <LoginPage /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/"
+            element={authUser ? <ChatPage /> : <Navigate to="/sign-in" />}
+          />
+          <Route
+            path="/sign-up"
+            element={!authUser ? <SignUpPage /> : <Navigate to="/" />}
+          />
+        </Routes>
+      </div>
+    </div>
   );
 }
 
