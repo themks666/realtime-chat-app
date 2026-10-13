@@ -94,7 +94,7 @@ export const getChatPartners = async (req, res) => {
         message.map((msg) =>
           msg.senderId.toString() == userId.toString()
             ? msg.receiverId.toString()
-            : msg.senderId.toString,
+            : msg.senderId.toString(),
         ),
       ),
     ];

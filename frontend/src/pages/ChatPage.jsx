@@ -37,7 +37,8 @@ export default function ChatContainer() {
   };
 
   if (!selectedUser) return <HomePage />;
-
+  console.log(messages);
+  
   return (
     <div className="flex-1 flex flex-col h-screen bg-gray-900 text-gray-100 overflow-hidden">
       <div className="px-4 py-3 bg-gray-800 border-b border-gray-700/50 flex items-center justify-between shadow-sm">

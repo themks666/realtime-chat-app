@@ -5,16 +5,18 @@ export const useChatStore = create((set, get) => ({
   allContacts: [],
   allPartners: [],
   isLoading: false,
+  isContactLoading: false,
+  isFriendLoading: false,
   selectedUser: null,
   activeChat: "friends",
   messages: [],
   activeChatToggle: (mode) => {
-    set({activeChat:mode})
+    set({ activeChat: mode });
   },
   isMessageLoading: false,
   getAllContacts: async () => {
     try {
-      set({ isLoading: true });
+      set({ isContactLoading: true });
       const res = await axiosInstance.get("/messages/contacts");
       console.log(res);
       set({ allContacts: res.data.users });
@@ -22,21 +24,20 @@ export const useChatStore = create((set, get) => ({
       set({ allContacts: [] });
       console.log(error);
     } finally {
-      set({ isLoading: false });
+      set({ isContactLoading: false });
     }
   },
   getAllPartners: async () => {
     try {
-      set({ isLoading: true });
+      set({ isFriendLoading: true });
       const res = await axiosInstance.get("/messages/chats");
-      console.log(res);
 
       set({ allPartners: res.data.chatPartners });
     } catch (error) {
       set({ allPartners: [] });
       console.log(error);
     } finally {
-      set({ isLoading: false });
+      set({ isFriendLoading: false });
     }
   },
   getAllMessagesById: async (partnersId) => {
@@ -53,6 +54,7 @@ export const useChatStore = create((set, get) => ({
     }
   },
   setSelectedUser: (user) => set({ selectedUser: user }),
+
   sendMessage: async (partnersId, messageData) => {
     try {
       set({ isMessageLoading: true });

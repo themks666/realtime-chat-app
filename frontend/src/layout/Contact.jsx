@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
-import { User } from "lucide-react";
+import { Loader, User } from "lucide-react";
 
 const Contact = () => {
-  const { allContacts, getAllContacts, setSelectedUser } = useChatStore();
+  const { allContacts, getAllContacts, setSelectedUser, isContactLoading } =
+    useChatStore();
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -14,14 +15,18 @@ const Contact = () => {
 
   return (
     <div className="space-y-2">
-      {allContacts.length === 0 ? (
+      {isContactLoading ? (
+        <div className="flex justify-center items-center p-8">
+          <Loader className="animate-spin" />
+        </div>
+      ) : allContacts.length === 0 ? (
         <div className="text-center py-6 text-sm text-gray-400">
           No Contacts found
         </div>
       ) : (
         allContacts.map((contact) => (
           <div
-           onClick={()=>setSelectedUser(contact)}
+            onClick={() => setSelectedUser(contact)}
             key={contact._id}
             className="flex items-center gap-3 p-2.5 rounded-2xl hover:bg-gray-700 transition cursor-pointer"
           >
