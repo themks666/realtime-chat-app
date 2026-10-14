@@ -7,8 +7,8 @@ const router = express.Router()
 router.use(arcjetProtection)
 router.post("/register", register)
 router.post("/login", login)
-router.post("/logout", logOut)
+router.get("/logout", logOut)
 router.post("/update-profile",protectedRoute, updateProfile)
-router.get("/verify",protectedRoute, (req, res)=>{ res.status(200).json(req.user)})
+router.get("/verify",protectedRoute, (req, res)=>{ res.status(200).json({user:req.user})})
 
 export default router

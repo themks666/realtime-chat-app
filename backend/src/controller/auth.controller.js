@@ -7,14 +7,12 @@ import { cloudinary } from "../lib/cloudinary.js";
 export const register = async (req, res) => {
   console.log("register");
   const { fullName, email, password } = req.body;
-  console.log(req.body);
   
   if (!fullName || !email || !password) {
     return res
     .status(403)
     .json({ success: false, message: "All fields are required!" });
   }
-  console.log(req.body);
   const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -22,7 +20,6 @@ export const register = async (req, res) => {
   if (!isValidEmail(email)) {
     return res.status(403).json({ success: false, message: "Invalid Email!" });
   }
-  console.log(req.body);
   try {
     const userExists = await UserModel.findOne({ email });
     if (userExists)
@@ -40,9 +37,10 @@ export const register = async (req, res) => {
       const savedUser = await createdUser.save();
       generateToken(savedUser._id, res);
      // sendEmail(savedUser.email);
+     const {password:_, ...withoutPasswordUser} = savedUser._doc
       return res
         .status(201)
-        .json({ success: true, message: "User Has been Created" });
+        .json({ success: true, message: "User Has been Created", user: withoutPasswordUser });
     }
   } catch (error) {
     console.log(error);
@@ -85,7 +83,7 @@ export const login = async (req, res) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
-export const logOut = async (req, res) => {
+export const logOut = async (_, res) => {
   console.log("Log Out");
   try {
     res.clearCookie("token");

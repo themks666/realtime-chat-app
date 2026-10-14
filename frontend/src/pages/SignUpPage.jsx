@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { useState } from "react";
 import { User, Mail, Lock, Loader } from "lucide-react";
@@ -34,7 +34,6 @@ export default function SignUpPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Full Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Full Name
@@ -52,7 +51,6 @@ export default function SignUpPage() {
             </div>
           </div>
 
-          {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email
@@ -69,8 +67,6 @@ export default function SignUpPage() {
               />
             </div>
           </div>
-
-          {/* Password */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
