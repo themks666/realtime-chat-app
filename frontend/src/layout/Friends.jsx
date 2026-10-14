@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { Loader, User } from "lucide-react";
+import { useAuthStore } from "../store/useAuthStore";
 
 const Friends = () => {
   const { allPartners, getAllPartners, setSelectedUser, isFriendLoading } =
     useChatStore();
-
+  const { onlineUser } = useAuthStore();
   useEffect(() => {
     const fetchPartners = async () => {
       await getAllPartners();
@@ -44,7 +45,11 @@ const Friends = () => {
                       <User className="w-5 h-5" />
                     </div>
                   )}
-                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-gray-800 rounded-full"></span>
+                  {onlineUser?.includes(partner._id) ? (
+                    <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-gray-800 rounded-full"></span>
+                  ) : (
+                    ""
+                  )}
                 </div>
 
                 <div className="flex-1 min-w-0">

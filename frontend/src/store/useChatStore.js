@@ -22,7 +22,7 @@ export const useChatStore = create((set, get) => ({
       set({ allContacts: res.data.users });
     } catch (error) {
       set({ allContacts: [] });
-      console.log(error);
+      console.log(error?.response?.data?.message);
     } finally {
       set({ isContactLoading: false });
     }
@@ -35,7 +35,7 @@ export const useChatStore = create((set, get) => ({
       set({ allPartners: res.data.chatPartners });
     } catch (error) {
       set({ allPartners: [] });
-      console.log(error);
+      console.log(error?.response?.data?.message);
     } finally {
       set({ isFriendLoading: false });
     }
@@ -44,11 +44,11 @@ export const useChatStore = create((set, get) => ({
     try {
       set({ isMessageLoading: true });
       const res = await axiosInstance.get(`/messages/${partnersId}`);
-      console.log(res);
+
       set({ messages: res.data.messages });
     } catch (error) {
       set({ messages: [] });
-      console.log(error);
+      console.log(error?.response?.data?.message);
     } finally {
       set({ isMessageLoading: false });
     }
@@ -62,11 +62,14 @@ export const useChatStore = create((set, get) => ({
         `/messages/send/${partnersId}`,
         messageData,
       );
-      console.log(res);
-      set({ messages: res.data.messages });
+      console.log("successful");
+      
+      set({ messages: get().messages.concat(res.data.message) })
+      console.log(res.data);
+      ;
     } catch (error) {
-      set({ messages: [] });
       console.log(error);
+      // console.log(error?.response?.data?.message);
     } finally {
       set({ isMessageLoading: false });
     }

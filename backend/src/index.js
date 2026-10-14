@@ -5,9 +5,10 @@ import dotenv from "dotenv";
 import AuthRouter from "./routes/auth.route.js";
 import MessageRouter from "./routes/message.route.js";
 import { connectDB } from "./lib/connect.js";
+import { app, server } from "./lib/socket.js";
 dotenv.config();
 
-const app = express();
+
 const PORT = process.env.PORT || 5000;
 
 app.use(
@@ -22,7 +23,7 @@ app.use(cookieParser());
 app.use("/api/auth", AuthRouter);
 app.use("/api/messages", MessageRouter);
 
-app.listen(PORT, async () => {
+server.listen(PORT, async () => {
     await connectDB()
   console.log("Server runnning on port 3000");
 });

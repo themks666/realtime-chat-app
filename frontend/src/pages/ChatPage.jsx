@@ -11,9 +11,10 @@ export default function ChatContainer() {
     selectedUser,
     getAllMessagesById,
     sendMessage,
+    allPartners,
     isMessageLoading,
   } = useChatStore();
-  const { authUser } = useAuthStore();
+  const { authUser, onlineUser } = useAuthStore();
   const [text, setText] = useState("");
   const messageEndRef = useRef(null);
   useEffect(() => {
@@ -37,8 +38,7 @@ export default function ChatContainer() {
   };
 
   if (!selectedUser) return <HomePage />;
-  console.log(messages);
-  
+
   return (
     <div className="flex-1 flex flex-col h-screen bg-gray-900 text-gray-100 overflow-hidden">
       <div className="px-4 py-3 bg-gray-800 border-b border-gray-700/50 flex items-center justify-between shadow-sm">
@@ -62,14 +62,16 @@ export default function ChatContainer() {
                 <User className="w-5 h-5" />
               </div>
             )}
-            <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-gray-800 rounded-full"></span>
+            {onlineUser?.includes(selectedUser._id) ? (
+              <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-gray-800 rounded-full"></span>
+            ) : null}
           </div>
 
           <div>
             <h3 className="text-sm font-semibold text-white leading-tight">
               {selectedUser.fullName}
             </h3>
-            <p className="text-xs text-emerald-400 font-medium">Online</p>
+            <p className="text-xs text-emerald-400 font-medium"> {onlineUser?.includes(selectedUser._id)?"Online": "offline"}</p>
           </div>
         </div>
       </div>
@@ -78,7 +80,7 @@ export default function ChatContainer() {
           <div className="flex items-center justify-center h-full text-gray-400 text-sm">
             Loading messages...
           </div>
-        ) : (messages || []).length === 0 ? (
+        ) : messages.length === 0 ? (
           <div className="flex items-center justify-center h-full text-gray-500 text-sm">
             No messages yet. Send a message to start the conversation!
           </div>
